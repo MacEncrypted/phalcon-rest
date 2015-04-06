@@ -49,6 +49,28 @@ $app->get('/notes/{id}', function ($id) use ($app) {
     }
 });
 
+$app->post('/notes', function () use ($app) {
+    $jarray = $app->request->getJsonRawBody();
+    
+    if ($jarray != NULL) {
+        if ($jarray->title && $jarray->text) {
+            $notes = new Notes();
+            $note = $notes->setSingle($jarray->title, $jarray->text);
+            $app->response->setStatusCode(201, "Created");
+            $app->response->setJsonContent(array('status' => 'OK', 'data' => $note));             
+        } else {
+            $app->response->setStatusCode(400, "Bad Request");
+            $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'missing :title: or :text:'));
+        }
+    } else {
+        $app->response->setStatusCode(400, "Bad Request");
+        $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'wrong JSON input'));
+   }
+   
+   $app->response->setContentType('application/json', 'utf-8');
+   return $app->response;
+});
+
 $app->notFound(function () use ($app) {
     $app->response->setStatusCode(404, "Not Found")->sendHeaders();
 });

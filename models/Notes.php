@@ -53,4 +53,13 @@ class Notes extends Model {
         
         return false;
     }
+    
+    public function setSingle($title, $text) {
+        $this->title = $title;
+        $this->text = $text;
+        
+        $this->save();
+        
+        return $this->id; 
+    }
 }
