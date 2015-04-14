@@ -32,6 +32,7 @@ $app['db'] = function() use ($config) {
  */
 
 $app->get('/', function () {
+    echo 'REST Api @Phalcon ' . Phalcon\Version::get();
 });
 
 $app->get('/notes' , function() use ($app) { 
@@ -69,6 +70,33 @@ $app->post('/notes', function () use ($app) {
    
    $app->response->setContentType('application/json', 'utf-8');
    return $app->response;
+});
+
+/*
+$app->put('/notes/{id}', function($id) use ($app) {
+    $jarray = $app->request->getJsonRawBody();
+    
+    if ($jarray != NULL) {
+        if ($jarray->id && $jarray->title && $jarray->text) {
+            
+        } else {
+            $app->response->setStatusCode(400, "Bad Request");
+            $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'missing :id: or :title: or :text:'));
+        }
+    } else {
+        $app->response->setStatusCode(400, "Bad Request");
+        $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'wrong JSON input'));        
+    }
+    return $app->response;
+});
+*/
+
+$app->put('/test/{id}' , function($id) use ($app) { 
+    echo $id;
+});
+
+$app->delete('/test/{id}' , function($id) use ($app) { 
+    echo $id;
 });
 
 $app->notFound(function () use ($app) {
