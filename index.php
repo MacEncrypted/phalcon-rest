@@ -92,11 +92,14 @@ $app->put('/notes/{id}', function($id) use ($app) {
 */
 
 $app->put('/test/{id}' , function($id) use ($app) { 
-    echo $id;
+    $app->response->setJsonContent(array('status' => 'OK', 'data' => $id));
+    return $app->response;
 });
 
 $app->delete('/test/{id}' , function($id) use ($app) { 
-    echo $id;
+    $response = new Phalcon\Http\Response();
+    $response->setJsonContent(array('status' => 'OK', 'data' => $id));
+    return $response;
 });
 
 $app->notFound(function () use ($app) {
