@@ -71,6 +71,13 @@ $app->post('/messages', function () use ($app) {
    return $app->response;
 });
 
+$app->get('/users', function () use ($app) {
+    $usr = new Users();
+    $app->response->setContentType('application/json', 'utf-8');
+    $app->response->setJsonContent($usr->getList());
+    return $app->response;
+});
+
 $app->get('/notes' , function() use ($app) { 
     $notes = new Notes();
     echo json_encode($notes->getAll());
