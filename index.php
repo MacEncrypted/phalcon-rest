@@ -35,6 +35,49 @@ $app->get('/', function () {
     echo 'REST Api @Phalcon ' . Phalcon\Version::get();
 });
 
+$app->get('/messages/{id_sender}/{id_receiver}', function ($id_sender, $id_receiver) use ($app) {
+    $msg = new Messages();
+    $app->response->setContentType('application/json', 'utf-8');
+    $app->response->setJsonContent($msg->getFlow($id_sender, $id_receiver));
+    return $app->response;
+});
+
+$app->get('/conversations/{id_one}/{id_two}', function ($id_one, $id_two) use ($app) {
+    $msg = new Messages();
+    $app->response->setContentType('application/json', 'utf-8');
+    $app->response->setJsonContent($msg->getConversation($id_one, $id_two));
+    return $app->response;
+});
+
+$app->post('/messages', function () use ($app) {
+    $jarray = $app->request->getJsonRawBody();
+    
+    if ($jarray != NULL) {
+        if ($jarray->id_sender && $jarray->id_receiver && $jarray->content) {
+            $msg = new Messages();
+            $message = $msg->setSingle($jarray->id_sender, $jarray->id_receiver, $jarray->content);
+            $app->response->setStatusCode(201, "Created");
+            $app->response->setJsonContent(array('status' => 'OK', 'data' => $message));             
+        } else {
+            $app->response->setStatusCode(400, "Bad Request");
+            $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'missing :id_sender: or :id_receiver: or :content:'));
+        }
+    } else {
+        $app->response->setStatusCode(400, "Bad Request");
+        $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'wrong JSON input'));
+   }
+   
+   $app->response->setContentType('application/json', 'utf-8');
+   return $app->response;
+});
+
+$app->get('/users', function () use ($app) {
+    $usr = new Users();
+    $app->response->setContentType('application/json', 'utf-8');
+    $app->response->setJsonContent($usr->getList());
+    return $app->response;
+});
+
 $app->get('/notes' , function() use ($app) { 
     $notes = new Notes();
     echo json_encode($notes->getAll());
