@@ -17,7 +17,7 @@ $config = new ConfigIni(__DIR__ . '/config/config.ini');
 // Start Micro
 $app = new Micro();
 
-//Setup the database service
+// Setup the database service
 $app['db'] = function() use ($config) {
     return new MysqlAdapter(array(
         "host" => $config->database->host,
@@ -25,6 +25,26 @@ $app['db'] = function() use ($config) {
         "password" => $config->database->password,
         "dbname" => $config->database->dbname
     ));
+};
+
+// Authentication
+$app['auth'] = function() use ($app, $config) {
+    $auth = array();
+    $authorization = $app->request->getHeader("AUTHORIZATION");
+    if ($authorization) {
+        $cut = str_replace('Basic ', '', $authorization);
+        $creds = explode(':', base64_decode($cut));
+        $auth['login'] = $creds[0];
+        $auth['password'] = $creds[1];
+    } else {
+        $auth['login'] = null;
+        $auth['password'] = null;
+    }
+    
+    $usr = new Users();    
+    $auth['id'] = $usr->getUserId($auth['login'], $auth['password'], $config['security']['key']);
+    
+    return $auth;
 };
 
 /**
@@ -69,6 +89,18 @@ $app->post('/messages', function () use ($app) {
    
    $app->response->setContentType('application/json', 'utf-8');
    return $app->response;
+});
+
+$app->get('/auth', function () use ($app) {        
+    if (($app['auth']['id'] != 0)) {
+        $usr = new Users();
+        $app->response->setContentType('application/json', 'utf-8');
+        $app->response->setJsonContent($usr->getList());
+    } else {
+        $app->response->setStatusCode(401, "Unauthorized");
+        $app->response->setContent("Access is not authorized");
+    }
+    return $app->response;    
 });
 
 $app->get('/users', function () use ($app) {
