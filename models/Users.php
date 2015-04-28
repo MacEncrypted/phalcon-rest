@@ -13,6 +13,11 @@ class Users extends Model {
      * @var string
      */
     protected $login;
+    
+    /**
+     * @var string
+     */
+    protected $password;
 
     /**
      * Get all messages from sender to receiver
@@ -29,5 +34,17 @@ class Users extends Model {
             $return_users[] = $return_user;
         }
         return $return_users;
-    }      
+    }  
+    
+    public function getUserId($login, $password, $key) {
+        $psha = sha1($key . $password);
+        
+        $user = $this->findFirst("login = '" . $login . "' AND password = '" . $psha . "'");
+        
+        if ($user!= false) {
+            return $user->id;
+        } 
+        
+        return 0;
+    }
 }
