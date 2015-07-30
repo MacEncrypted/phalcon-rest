@@ -7,16 +7,40 @@ Current REST Api is released under ```http://rest.encrypted.pl/```
 ### GET Messages
 Messages sent from one user to another
 - request: ```http://rest.encrypted.pl/messages/1/2```
-- response: JSON
+- response JSON:
+```
+[
+    {
+        "id": "123",
+        "time": "1438290158",
+        "title": "Old good Lorem Ipsum"
+    }
+]
+```
 
 ### GET Conversations
 Get both sent and received messages from one user to another 
 - request: ```http://rest.encrypted.pl/conversations/1/2```
-- response: JSON
+- response JSON:
+```
+[
+    {
+        "id": "122",
+        "time": "1430222755",
+        "title": "Que?"
+    },
+    {
+        "id": "123",
+        "time": "1438290158",
+        "title": "Old good Lorem Ipsum"
+    }
+]
+```
 
 ### POST Message
 Send message from one user to another
-- request:
+- request: ```http://rest.encrypted.pl/messages```
+- request JSON:
 ```
 {
   "id_sender": 1,
@@ -24,7 +48,7 @@ Send message from one user to another
   "content": "Old good Lorem Ipsum"
 }
 ```
-- response: JSON
+- response JSON:
 ```
 {
     "status": "OK",
