@@ -42,7 +42,7 @@ $app['auth'] = function() use ($app, $config) {
     }
     
     $usr = new Users();    
-    $auth['id'] = $usr->getUserId($auth['login'], $auth['password'], $config['security']['key']);
+    $auth['id'] = $usr->getUserId($auth['login'], $auth['password']);
     
     return $auth;
 };
@@ -53,6 +53,10 @@ $app['auth'] = function() use ($app, $config) {
 
 $app->get('/', function () {
     echo 'REST Api @Phalcon ' . Phalcon\Version::get();
+    echo '<br/>';
+    echo 'sha1(password) = ' . sha1('password');
+    echo '<br/>';
+    echo 'sha1(sha1(password) + Y-m-d) = ' .sha1(sha1('password') . date('Y-m-d'));
 });
 
 $app->get('/messages/{id_sender}/{id_receiver}', function ($id_sender, $id_receiver) use ($app) {

@@ -55,3 +55,24 @@ Send message from one user to another
     "data": "123"
 }
 ```
+
+### GET Authorization status
+Get user list. Only authorized users got access to users list.
+- request: ```http://rest.encrypted.pl/auth``` with Basic Auth ```login: admin``` and password ```sha1(sha1(password) . date('Y-m-d'))```. Current sha1 hashes can be found at main router: ```http://rest.encrypted.pl```
+- response JSON:
+```
+[
+  {
+    "id": "1",
+    "login": "JohnDoe"
+  },
+  {
+    "id": "2",
+    "login": "Foo Bar"
+  },
+  {
+    "id": "3",
+    "login": "admin"
+  }
+]
+```

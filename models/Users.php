@@ -36,13 +36,22 @@ class Users extends Model {
         return $return_users;
     }  
     
-    public function getUserId($login, $password, $key) {
-        $psha = sha1($key . $password);
-        
-        $user = $this->findFirst("login = '" . $login . "' AND password = '" . $psha . "'");
+    /**
+     * Password sent by user must be:
+     * sha1(saved_hash + Y-m-d)
+     * 
+     * @param type $login
+     * @param type $password
+     * @return int
+     */
+    public function getUserId($login, $password) {
+        $user = $this->findFirst("login = '" . $login . "'");
         
         if ($user!= false) {
-            return $user->id;
+            $rhash = sha1($user->password . date('Y-m-d'));
+            if ($rhash == $password) {
+                return $user->id;
+            }
         } 
         
         return 0;
