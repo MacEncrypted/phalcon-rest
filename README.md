@@ -4,6 +4,10 @@ Basic REST Api written with Phalcon PHP.
 # Tests
 Current REST Api is released under ```http://rest.encrypted.pl/```
 
+### Basic Auth
+For some requests you need Basic Auth. Basic Auth test data are: ```login: admin``` and password ```sha1(sha1(password) . date('Y-m-d'))```. Current sha1 hashes can be found at main router: ```http://rest.encrypted.pl```
+
+
 ### GET Messages
 Messages sent from one user to another
 - request: ```http://rest.encrypted.pl/messages/1/2```
@@ -56,9 +60,9 @@ Send message from one user to another
 }
 ```
 
-### GET Authorization status
-Get user list. Only authorized users got access to users list.
-- request: ```http://rest.encrypted.pl/auth``` with Basic Auth ```login: admin``` and password ```sha1(sha1(password) . date('Y-m-d'))```. Current sha1 hashes can be found at main router: ```http://rest.encrypted.pl```
+### GET Users list
+Get users list. Only authorized users got access to users list.
+- request: ```http://rest.encrypted.pl/auth```
 - response JSON:
 ```
 [
