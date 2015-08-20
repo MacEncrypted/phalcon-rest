@@ -114,6 +114,7 @@ $app->get('/users', function () use ($app) {
     return $app->response;
 });
 
+/* Notatki nie bardzo wiem po co
 $app->get('/notes' , function() use ($app) { 
     $notes = new Notes();
     echo json_encode($notes->getAll());
@@ -149,7 +150,7 @@ $app->post('/notes', function () use ($app) {
    
    $app->response->setContentType('application/json', 'utf-8');
    return $app->response;
-});
+});*/
 
 /*
 $app->put('/notes/{id}', function($id) use ($app) {
@@ -170,6 +171,11 @@ $app->put('/notes/{id}', function($id) use ($app) {
 });
 */
 
+$app->get('/test/{id}' , function($id) use ($app) { 
+    $app->response->setJsonContent(array('status' => 'OK', 'data' => $id));
+    return $app->response;
+});
+
 $app->put('/test/{id}' , function($id) use ($app) { 
     $app->response->setJsonContent(array('status' => 'OK', 'data' => $id));
     return $app->response;
@@ -183,6 +189,7 @@ $app->delete('/test/{id}' , function($id) use ($app) {
 
 $app->notFound(function () use ($app) {
     $app->response->setStatusCode(404, "Not Found")->sendHeaders();
+    var_dump($_REQUEST);
 });
 
 $app->handle();
