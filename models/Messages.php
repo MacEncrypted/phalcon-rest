@@ -19,6 +19,10 @@ class Messages extends Model {
      */
     protected $id_sender;
     
+    public function getIdSender() {
+        return $this->id_sender;
+    }
+    
     /**
      * @var integer
      */

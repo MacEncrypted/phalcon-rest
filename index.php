@@ -95,7 +95,30 @@ $app->post('/messages', function () use ($app) {
    return $app->response;
 });
 
-$app->get('/auth', function () use ($app) {        
+$app->put('/messages/{id}', function($id) use ($app) {
+    $msg = Messages::findFirst($id);
+    if ($msg && ($app['auth']['id'] == $msg->getIdSender())) {
+        $jarray = $app->request->getJsonRawBody();
+    
+        if ($jarray != NULL && ($jarray->id_sender && $jarray->id_receiver && $jarray->content)) {
+            echo 'jest tablica i dobry user - aktualizuj';
+                
+                //message = $msg->updateSingle($jarray->id_sender, $jarray->id_receiver, $jarray->content);
+                //$app->response->setStatusCode(201, "Created");
+                //$app->response->setJsonContent(array('status' => 'OK', 'data' => $message));             
+        } else {
+            $app->response->setStatusCode(400, "Bad Request");
+            $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'wrong JSON input'));
+       }
+    } else {
+        $app->response->setStatusCode(401, 'Unauthorized');
+        $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'Access is not authorized'));
+    }   
+  $app->response->setContentType('application/json', 'utf-8');
+   return $app->response;
+});
+
+$app->get('/users', function () use ($app) {        
     if (($app['auth']['id'] != 0)) {
         $usr = new Users();
         $app->response->setContentType('application/json', 'utf-8');
@@ -105,86 +128,6 @@ $app->get('/auth', function () use ($app) {
         $app->response->setContent("Access is not authorized");
     }
     return $app->response;    
-});
-
-$app->get('/users', function () use ($app) {
-    $usr = new Users();
-    $app->response->setContentType('application/json', 'utf-8');
-    $app->response->setJsonContent($usr->getList());
-    return $app->response;
-});
-
-/* Notatki nie bardzo wiem po co
-$app->get('/notes' , function() use ($app) { 
-    $notes = new Notes();
-    echo json_encode($notes->getAll());
-});
-
-$app->get('/notes/{id}', function ($id) use ($app) {
-    $notes = new Notes();
-    $note = $notes->getSingle($id);
-    if ($note != false) {
-        echo json_encode($note);        
-    } else {
-        $app->response->setStatusCode(404, "Not Found")->sendHeaders();
-    }
-});
-
-$app->post('/notes', function () use ($app) {
-    $jarray = $app->request->getJsonRawBody();
-    
-    if ($jarray != NULL) {
-        if ($jarray->title && $jarray->text) {
-            $notes = new Notes();
-            $note = $notes->setSingle($jarray->title, $jarray->text);
-            $app->response->setStatusCode(201, "Created");
-            $app->response->setJsonContent(array('status' => 'OK', 'data' => $note));             
-        } else {
-            $app->response->setStatusCode(400, "Bad Request");
-            $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'missing :title: or :text:'));
-        }
-    } else {
-        $app->response->setStatusCode(400, "Bad Request");
-        $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'wrong JSON input'));
-   }
-   
-   $app->response->setContentType('application/json', 'utf-8');
-   return $app->response;
-});*/
-
-/*
-$app->put('/notes/{id}', function($id) use ($app) {
-    $jarray = $app->request->getJsonRawBody();
-    
-    if ($jarray != NULL) {
-        if ($jarray->id && $jarray->title && $jarray->text) {
-            
-        } else {
-            $app->response->setStatusCode(400, "Bad Request");
-            $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'missing :id: or :title: or :text:'));
-        }
-    } else {
-        $app->response->setStatusCode(400, "Bad Request");
-        $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'wrong JSON input'));        
-    }
-    return $app->response;
-});
-*/
-
-$app->get('/test/{id}' , function($id) use ($app) { 
-    $app->response->setJsonContent(array('status' => 'OK', 'data' => $id));
-    return $app->response;
-});
-
-$app->put('/test/{id}' , function($id) use ($app) { 
-    $app->response->setJsonContent(array('status' => 'OK', 'data' => $id));
-    return $app->response;
-});
-
-$app->delete('/test/{id}' , function($id) use ($app) { 
-    $response = new Phalcon\Http\Response();
-    $response->setJsonContent(array('status' => 'OK', 'data' => $id));
-    return $response;
 });
 
 $app->notFound(function () use ($app) {
