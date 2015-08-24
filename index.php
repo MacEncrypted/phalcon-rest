@@ -4,11 +4,13 @@ use Phalcon\Mvc\Micro as Micro;
 use \Phalcon\Loader as Loader;
 use Phalcon\Db\Adapter\Pdo\Mysql as MysqlAdapter;
 use Phalcon\Config\Adapter\Ini as ConfigIni;
+use Phalcon\Mvc\Micro\Collection as MicroCollection;
 
 // Setup loader
 $loader = new Loader();
 $loader->registerDirs(array(
-    __DIR__ . '/models/'
+    __DIR__ . '/app/models/',    
+    __DIR__ . '/app/controllers/'
 ))->register();
 
 // Read the configuration
@@ -59,13 +61,6 @@ $app->get('/', function () {
     echo 'sha1(sha1(password) + Y-m-d) = ' .sha1(sha1('password') . date('Y-m-d'));
 });
 
-$app->get('/messages/{id_sender}/{id_receiver}', function ($id_sender, $id_receiver) use ($app) {
-    $msg = new Messages();
-    $app->response->setContentType('application/json', 'utf-8');
-    $app->response->setJsonContent($msg->getFlow($id_sender, $id_receiver));
-    return $app->response;
-});
-
 $app->get('/conversations/{id_one}/{id_two}', function ($id_one, $id_two) use ($app) {
     $msg = new Messages();
     $app->response->setContentType('application/json', 'utf-8');
@@ -73,27 +68,17 @@ $app->get('/conversations/{id_one}/{id_two}', function ($id_one, $id_two) use ($
     return $app->response;
 });
 
-$app->post('/messages', function () use ($app) {
-    $jarray = $app->request->getJsonRawBody();
-    
-    if ($jarray != NULL) {
-        if ($jarray->id_sender && $jarray->id_receiver && $jarray->content) {
-            $msg = new Messages();
-            $message = $msg->setSingle($jarray->id_sender, $jarray->id_receiver, $jarray->content);
-            $app->response->setStatusCode(201, "Created");
-            $app->response->setJsonContent(array('status' => 'OK', 'data' => $message));             
-        } else {
-            $app->response->setStatusCode(400, "Bad Request");
-            $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'missing :id_sender: or :id_receiver: or :content:'));
-        }
-    } else {
-        $app->response->setStatusCode(400, "Bad Request");
-        $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'wrong JSON input'));
-   }
-   
-   $app->response->setContentType('application/json', 'utf-8');
-   return $app->response;
-});
+$messages = new MicroCollection();
+
+// Set the main handler & prefix
+$messages->setHandler(new MessagesController($app));
+$messages->setPrefix('/messages');
+
+// Messages methods
+$messages->post('/', 'index');
+$messages->get('/{id_sender}/{id_receiver}', 'stream');
+
+$app->mount($messages);
 
 $app->put('/messages/{id}', function($id) use ($app) {
     $msg = Messages::findFirst($id);
@@ -118,17 +103,23 @@ $app->put('/messages/{id}', function($id) use ($app) {
    return $app->response;
 });
 
-$app->get('/users', function () use ($app) {        
-    if (($app['auth']['id'] != 0)) {
-        $usr = new Users();
-        $app->response->setContentType('application/json', 'utf-8');
-        $app->response->setJsonContent($usr->getList());
-    } else {
-        $app->response->setStatusCode(401, "Unauthorized");
-        $app->response->setContent("Access is not authorized");
-    }
-    return $app->response;    
-});
+$users = new MicroCollection();
+
+// Set the main handler. ie. a controller instance
+$users->setHandler(new UsersController($app));
+
+// Set a common prefix for all routes
+$users->setPrefix('/users');
+
+// Use the method 'index' in PostsController
+$users->get('/', 'index');
+
+// Use the method 'show' in PostsController
+//$posts->get('/show/{slug}', 'show');
+
+$app->mount($users);
+
+
 
 $app->notFound(function () use ($app) {
     $app->response->setStatusCode(404, "Not Found")->sendHeaders();
