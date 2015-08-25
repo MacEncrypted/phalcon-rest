@@ -64,13 +64,6 @@ $core->get('/', 'index');
 
 $app->mount($core);
 
-$app->get('/conversations/{id_one}/{id_two}', function ($id_one, $id_two) use ($app) {
-    $msg = new Messages();
-    $app->response->setContentType('application/json', 'utf-8');
-    $app->response->setJsonContent($msg->getConversation($id_one, $id_two));
-    return $app->response;
-});
-
 $messages = new MicroCollection();
 
 // Set the main handler & prefix
@@ -115,7 +108,11 @@ $users->setHandler(new UsersController($app));
 $users->setPrefix('/users');
 
 // Use the method 'index' in PostsController
-$users->get('/', 'index');
+$users->post('/', 'create');
+$users->put('/{id}', 'update');
+$users->delete('/{id}', 'delete');
+$users->get('/', 'preview');
+$users->get('/{id}', 'info');
 
 // Use the method 'show' in PostsController
 //$posts->get('/show/{slug}', 'show');

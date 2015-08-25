@@ -1,6 +1,7 @@
 <?php
 
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 
 class Users extends Model {
 
@@ -18,13 +19,46 @@ class Users extends Model {
      * @var string
      */
     protected $password;
-
-    /**
-     * Get all messages from sender to receiver
-     * @param type $id_sender
-     * @param type $id_receiver
-     * @return type
-     */
+    
+    public function validation()
+{
+    $this->validate(new Uniqueness(array(
+        'field' => 'login'
+    )));
+    if ($this->validationHasFailed() == true) {
+          return false;
+      } return true;
+}
+    
+    public function setUser($login, $password) {
+        $this->login = $login;
+        $this->password = $password;
+        if ($this->validation()) {
+            $this->save();
+        }
+        
+        return $this->id;
+    }
+    
+    public function updateUser($login, $password) {
+        $this->login = $login;
+        $this->password = $password;
+        if ($this->validation()) {
+            $this->save();
+        } else {
+            return null;
+        }
+        
+        return $this->id;
+    }
+    
+    public function getUser() {
+        $return_user = [];
+        $return_user['id'] = $this->id;
+        $return_user['login'] = $this->login;
+        return $return_user;
+    }
+    
     public function getList() {
         $return_users = array();    
         foreach ($this->find() as $user) {
