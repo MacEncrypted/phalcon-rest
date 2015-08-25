@@ -10,6 +10,11 @@ class MessagesController extends Phalcon\DI\Injectable {
         $this->app->response->setContentType('application/json', 'utf-8');
     }
 
+    /**
+     * Create new message
+     * 
+     * @return Response
+     */
     public function create()
     {
         if (!empty($this->app['auth']['id'])) {
@@ -35,6 +40,13 @@ class MessagesController extends Phalcon\DI\Injectable {
         return $this->app->response;
     }
 
+    /**
+     * List messages sent from one user to another
+     * 
+     * @param integer $id_sender
+     * @param integer $id_receiver
+     * @return Response
+     */
     public function stream($id_sender, $id_receiver)
     {
         if (!empty($this->app['auth']['id']) && ($this->app['auth']['id'] == $id_sender || $this->app['auth']['id'] == $id_receiver)) {
