@@ -29,6 +29,15 @@ $app['db'] = function() use ($config) {
     ));
 };
 
+// Include controllers
+$app['controllers'] = function() {
+    return [
+        'core' => true,
+        'users' => true,
+        'messages' => true
+    ];
+};
+
 // Authentication
 $app['auth'] = function() use ($app, $config) {
     $auth = array();
@@ -49,81 +58,56 @@ $app['auth'] = function() use ($app, $config) {
     return $auth;
 };
 
-/**
- * Application
- */
+// CoreController
+if ($app['controllers']['core']) {
+    $core = new MicroCollection();
 
-$core = new MicroCollection();
+    // Set the handler & prefix
+    $core->setHandler(new CoreController($app));
+    $core->setPrefix('/');
 
-// Set the main handler & prefix
-$core->setHandler(new CoreController($app));
-$core->setPrefix('/');
+    // Set routers
+    $core->get('/', 'index');
 
-// core methods
-$core->get('/', 'index');
+    $app->mount($core);
+}
 
-$app->mount($core);
+//  MessagesController
+if ($app['controllers']['messages']) {
+    $messages = new MicroCollection();
 
-$messages = new MicroCollection();
+    // Set the handler & prefix
+    $messages->setHandler(new MessagesController($app));
+    $messages->setPrefix('/messages');
 
-// Set the main handler & prefix
-$messages->setHandler(new MessagesController($app));
-$messages->setPrefix('/messages');
+    // Set routers
+    $messages->post('/', 'index');
+    $messages->get('/{id_sender}/{id_receiver}', 'stream');
 
-// Messages methods
-$messages->post('/', 'index');
-$messages->get('/{id_sender}/{id_receiver}', 'stream');
+    $app->mount($messages);
+}
 
-$app->mount($messages);
+// UsersController
+if ($app['controllers']['users']) {
+    $users = new MicroCollection();
 
-$app->put('/messages/{id}', function($id) use ($app) {
-    $msg = Messages::findFirst($id);
-    if ($msg && ($app['auth']['id'] == $msg->getIdSender())) {
-        $jarray = $app->request->getJsonRawBody();
-    
-        if ($jarray != NULL && ($jarray->id_sender && $jarray->id_receiver && $jarray->content)) {
-            echo 'jest tablica i dobry user - aktualizuj';
-                
-                //message = $msg->updateSingle($jarray->id_sender, $jarray->id_receiver, $jarray->content);
-                //$app->response->setStatusCode(201, "Created");
-                //$app->response->setJsonContent(array('status' => 'OK', 'data' => $message));             
-        } else {
-            $app->response->setStatusCode(400, "Bad Request");
-            $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'wrong JSON input'));
-       }
-    } else {
-        $app->response->setStatusCode(401, 'Unauthorized');
-        $app->response->setJsonContent(array('status' => 'ERROR', 'data' => 'Access is not authorized'));
-    }   
-  $app->response->setContentType('application/json', 'utf-8');
-   return $app->response;
-});
+    // Set the handler & prefix
+    $users->setHandler(new UsersController($app));
+    $users->setPrefix('/users');
 
-$users = new MicroCollection();
+    // Set routers
+    $users->post('/', 'create');
+    $users->put('/{id}', 'update');
+    $users->delete('/{id}', 'delete');
+    $users->get('/', 'preview');
+    $users->get('/{id}', 'info');
 
-// Set the main handler. ie. a controller instance
-$users->setHandler(new UsersController($app));
+    $app->mount($users);
+}
 
-// Set a common prefix for all routes
-$users->setPrefix('/users');
-
-// Use the method 'index' in PostsController
-$users->post('/', 'create');
-$users->put('/{id}', 'update');
-$users->delete('/{id}', 'delete');
-$users->get('/', 'preview');
-$users->get('/{id}', 'info');
-
-// Use the method 'show' in PostsController
-//$posts->get('/show/{slug}', 'show');
-
-$app->mount($users);
-
-
-
+// Not Found
 $app->notFound(function () use ($app) {
     $app->response->setStatusCode(404, "Not Found")->sendHeaders();
-    var_dump($_REQUEST);
 });
 
 $app->handle();

@@ -10,14 +10,23 @@ class UsersController extends Phalcon\DI\Injectable {
         $this->app->response->setContentType('application/json', 'utf-8');
     }
 
+    /**
+     * Return list of Users
+     * 
+     * @return Response
+     */
     public function preview()
     {
         $usr = new Users();
-        $this->app->response->setContentType('application/json', 'utf-8');
         $this->app->response->setJsonContent($usr->getList());
         return $this->app->response;
     }
 
+    /**
+     * Create new User
+     * 
+     * @return Response
+     */
     public function create()
     {
         $jarray = $this->app->request->getJsonRawBody();
@@ -42,11 +51,16 @@ class UsersController extends Phalcon\DI\Injectable {
         return $this->app->response;
     }
 
+    /**
+     * Return detailed data about User
+     * 
+     * @param integer $id
+     * @return Response
+     */
     public function info($id)
     {
         $user = Users::findFirst($id);
         if ($user) {
-            $this->app->response->setContentType('application/json', 'utf-8');
             $this->app->response->setJsonContent($user->getUser());
         } else {
             $this->app->response
@@ -56,6 +70,12 @@ class UsersController extends Phalcon\DI\Injectable {
         return $this->app->response;
     }
 
+    /**
+     * Update User data
+     * 
+     * @param integer $id
+     * @return Response
+     */
     public function update($id)
     {
         if (!empty($this->app['auth']['id']) && ($this->app['auth']['id'] == $id)) {
@@ -66,7 +86,6 @@ class UsersController extends Phalcon\DI\Injectable {
                 $userId = $user->updateUser($jarray->login, $jarray->password);
                 if ($userId) {
                     $this->app->response
-                            ->setStatusCode(200, "OK")
                             ->setJsonContent(array('status' => 'OK', 'data' => $userId));
                 } else {
                     $this->app->response
@@ -79,12 +98,19 @@ class UsersController extends Phalcon\DI\Injectable {
                         ->setJsonContent(array('status' => 'ERROR', 'data' => 'wrong JSON input'));
             }
         } else {
-            $this->app->response->setStatusCode(401, "Unauthorized")
+            $this->app->response
+                    ->setStatusCode(401, "Unauthorized")
                     ->setJsonContent(array('status' => 'ERROR', 'data' => 'Access is not authorized'));
         }
         return $this->app->response;
     }
 
+    /**
+     * Delete User
+     * 
+     * @param integer $id
+     * @return Response
+     */
     public function delete($id)
     {
         if (!empty($this->app['auth']['id']) && ($this->app['auth']['id'] == $id)) {
@@ -99,7 +125,8 @@ class UsersController extends Phalcon\DI\Injectable {
                         ->setJsonContent(array('status' => 'OK', 'data' => 'User deleted'));
             }
         } else {
-            $this->app->response->setStatusCode(401, "Unauthorized")
+            $this->app->response
+                    ->setStatusCode(401, "Unauthorized")
                     ->setJsonContent(array('status' => 'ERROR', 'data' => 'Access is not authorized'));
         }
         return $this->app->response;

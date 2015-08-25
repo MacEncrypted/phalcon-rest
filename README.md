@@ -1,67 +1,18 @@
 # phalcon-rest
-Basic REST Api written with Phalcon PHP.
+This is basic REST Api written with Phalcon PHP. Current REST Api is released under ```http://rest.encrypted.pl/```
 
-# Tests
-Current REST Api is released under ```http://rest.encrypted.pl/```
+# Information
 
 ### Basic Auth
 For some requests you need Basic Auth. Basic Auth test data are: ```login: admin``` and password ```sha1(sha1(password) . date('Y-m-d'))```. Current sha1 hashes can be found at main router: ```http://rest.encrypted.pl```
 
+# Documentation
 
-### GET Messages
-Messages sent from one user to another
-- request: ```http://rest.encrypted.pl/messages/1/2```
-- response JSON:
-```
-[
-    {
-        "id": "123",
-        "time": "1438290158",
-        "title": "Old good Lorem Ipsum"
-    }
-]
-```
-
-### GET Conversations
-Get both sent and received messages from one user to another 
-- request: ```http://rest.encrypted.pl/conversations/1/2```
-- response JSON:
-```
-[
-    {
-        "id": "122",
-        "time": "1430222755",
-        "title": "Que?"
-    },
-    {
-        "id": "123",
-        "time": "1438290158",
-        "title": "Old good Lorem Ipsum"
-    }
-]
-```
-
-### POST Message
-Send message from one user to another
-- request: ```http://rest.encrypted.pl/messages```
-- request JSON:
-```
-{
-  "id_sender": 1,
-  "id_receiver": 2,
-  "content": "Old good Lorem Ipsum"
-}
-```
-- response JSON:
-```
-{
-    "status": "OK",
-    "data": "123"
-}
-```
+## Users Module
+This module covers REST methods for creating, updating, editing and listing Users.
 
 ### GET Users list
-Get users list. Only authorized users got access to users list.
+- auth: *NO*
 - request: ```http://rest.encrypted.pl/auth```
 - response JSON:
 ```
