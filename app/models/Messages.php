@@ -44,9 +44,16 @@ class Messages extends Model {
      * @param type $id_receiver
      * @return type
      */
-    public function getFlow($id_sender, $id_receiver) {
+    public function getFlow($id_sender, $id_receiver, $offset = 0, $limit = 10) {
         $return_messages = array();    
-        foreach ($this->find("id_sender = '" . $id_sender . "' AND id_receiver = '" . $id_receiver . "'") as $message) {
+        foreach ($this->find(
+                [
+                    "id_sender" => $id_sender,
+                    "id_receiver" => $id_receiver,
+                    "limit" => ["number" => $limit, "offset" => $offset],
+                    "order" => "id DESC"
+                ]
+                ) as $message) {
             $return_message = array();
             $return_message['id'] = $message->id;
             $return_message['time'] = $message->time;

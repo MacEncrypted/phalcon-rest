@@ -83,3 +83,43 @@ This module covers REST methods for creating, updating, editing and listing User
 - authentication: YES
 - request: ```DELETE http://rest.encrypted.pl/users/1```
 - response: ```HTTP 204```
+
+## Messages Module
+
+### Create new message
+- authentication: YES
+- request: ```POST http://rest.encrypted.pl/messages```
+- request JSON:
+```
+{
+    "id_receiver": "1",
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis maximus mollis faucibus. Etiam eget semper urna, eu finibus urna. Nulla nec erat id sapien scelerisque malesuada."
+}
+```
+- response JSON:
+```
+{
+    "status": "OK",
+    "data": "1"
+}
+```
+
+### List messages from one user to another
+- authentication: YES
+- request: ```GET http://rest.encrypted.pl/messages/3/1```
+- optional request data: ```?offset=100&limit=500```
+- response JSON:
+```
+[
+    {
+        "id": "1",
+        "time": "1440532798",
+        "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis maximus mollis faucibus. Etiam eget semper urna, eu finibus urna. Nulla nec erat id sapien scelerisque malesuada."
+    },
+    {
+        "id": "2",
+        "time": "1440533028",
+        "title": "Pellentesque sit amet ligula vitae justo dictum pretium. Sed sed gravida enim. Maecenas ut dignissim mi. In vitae felis a urna accumsan accumsan."
+    }
+]
+```

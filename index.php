@@ -81,7 +81,7 @@ if ($app['controllers']['messages']) {
     $messages->setPrefix('/messages');
 
     // Set routers
-    $messages->post('/', 'index');
+    $messages->post('/', 'create');
     $messages->get('/{id_sender}/{id_receiver}', 'stream');
 
     $app->mount($messages);
