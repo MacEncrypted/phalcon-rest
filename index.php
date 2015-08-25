@@ -53,13 +53,16 @@ $app['auth'] = function() use ($app, $config) {
  * Application
  */
 
-$app->get('/', function () {
-    echo 'REST Api @Phalcon ' . Phalcon\Version::get();
-    echo '<br/>';
-    echo 'sha1(password) = ' . sha1('password');
-    echo '<br/>';
-    echo 'sha1(sha1(password) + Y-m-d) = ' .sha1(sha1('password') . date('Y-m-d'));
-});
+$core = new MicroCollection();
+
+// Set the main handler & prefix
+$core->setHandler(new CoreController($app));
+$core->setPrefix('/');
+
+// core methods
+$core->get('/', 'index');
+
+$app->mount($core);
 
 $app->get('/conversations/{id_one}/{id_two}', function ($id_one, $id_two) use ($app) {
     $msg = new Messages();
