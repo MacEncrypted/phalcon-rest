@@ -123,3 +123,18 @@ This module covers REST methods for creating, updating, editing and listing User
     }
 ]
 ```
+
+### List latest messages (inbox)
+- authentication: YES
+- request: ```GET http://rest.encrypted.pl/messages/inbox```
+- optional request data: ```?offset=0&limit=1```
+- response JSON:
+```
+[
+  {
+    "id": "2",
+    "time": "1440533028",
+    "title": "Pellentesque sit amet ligula vitae justo dictum pretium. Sed sed gravida enim. Maecenas ut dignissim mi. In vitae felis a urna accumsan accumsan."
+  }
+]
+```

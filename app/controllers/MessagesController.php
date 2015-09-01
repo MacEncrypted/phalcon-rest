@@ -63,6 +63,11 @@ class MessagesController extends Phalcon\DI\Injectable {
         return $this->app->response;
     }
 
+    /**
+     * List latest messages
+     * 
+     * @return Response
+     */
     public function inbox()
     {
         if (!empty($this->app['auth']['id'])) {
