@@ -63,4 +63,19 @@ class MessagesController extends Phalcon\DI\Injectable {
         return $this->app->response;
     }
 
+    public function inbox()
+    {
+        if (!empty($this->app['auth']['id'])) {
+            $msg = new Messages();
+            $offset = $this->app->request->getQuery("offset");
+            $limit = $this->app->request->getQuery("limit");
+            $this->app->response->setJsonContent($msg->getInbox($this->app['auth']['id'], $offset, $limit));
+            return $this->app->response;
+        } else {
+            $this->app->response
+                    ->setStatusCode(401, "Unauthorized")
+                    ->setJsonContent(array('status' => 'ERROR', 'data' => 'Access is not authorized'));
+        }
+        return $this->app->response;
+    }
 }
