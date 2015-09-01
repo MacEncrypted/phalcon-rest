@@ -1,5 +1,5 @@
 # phalcon-rest
-This is basic REST Api written with Phalcon PHP. Current REST Api is released under ```http://rest.encrypted.pl/```
+This is basic REST Api written with Phalcon PHP. Current REST Api is released under [http://rest.encrypted.pl/](http://rest.encrypted.pl/)
 
 # Information
 
