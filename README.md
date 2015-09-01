@@ -1,5 +1,23 @@
 # phalcon-rest
-This is basic REST Api written with Phalcon PHP. Current REST Api is released under [http://rest.encrypted.pl/](http://rest.encrypted.pl/)
+This is basic REST Api written with Phalcon PHP. Current REST Api is released under  [http://rest.encrypted.pl/](http://rest.encrypted.pl/)
+
+# License 
+MIT is a short, permissive software license. Basically, you can do whatever you want as long as you include the original copyright to *Encrypted.pl* and license notice in any copy of the software/source.
+
+You can
+- Commercial Use
+- Modify
+- Distribute
+- Sublicense
+- Private Use
+
+
+You Cannot
+- Hold liable
+
+You Must
+- Include Copyright
+- Include License
 
 # Information
 
