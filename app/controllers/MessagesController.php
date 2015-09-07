@@ -20,7 +20,7 @@ class MessagesController extends Phalcon\DI\Injectable {
         if (!empty($this->app['auth']['id'])) {
             $jarray = $this->app->request->getJsonRawBody();
 
-            if (($jarray != NULL) && ($jarray->id_receiver && $jarray->content && $jarray->type)) {
+            if (($jarray != NULL) && ($jarray->id_receiver && $jarray->content && isset($jarray->type))) {
                 $msg = new Messages();
                 $message = $msg->setSingle($this->app['auth']['id'], $jarray->id_receiver, $jarray->content, $jarray->type);
                 $this->app->response

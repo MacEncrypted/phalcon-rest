@@ -141,8 +141,14 @@ This module covers REST methods for creating, updating, editing and listing User
 - note: since login is unique you MUST change it when updating User, BUG: https://github.com/phalcon/cphalcon/issues/1527
 
 ### Delete user
-- authentication: YES
+- authentication: YES TWO STEP
 - request: ```DELETE http://rest.encrypted.pl/users/1```
+- request JSON:
+```
+{
+    "old_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"
+}
+```
 - response: ```HTTP 204```
 
 ## Messages Module
@@ -197,6 +203,7 @@ This module covers REST methods for creating, updating, editing and listing User
 [
   {
     "id": "2",
+    "id_sender": "1",
     "time": "1440533028",
     "title": "Pellentesque sit amet ligula vitae justo dictum pretium. Sed sed gravida enim. Maecenas ut dignissim mi. In vitae felis a urna accumsan accumsan.",
     "type": "0"

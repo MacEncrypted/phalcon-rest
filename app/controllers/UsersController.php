@@ -114,15 +114,22 @@ class UsersController extends Phalcon\DI\Injectable {
     public function delete($id)
     {
         if (!empty($this->app['auth']['id']) && ($this->app['auth']['id'] == $id)) {
+            $jarray = $this->app->request->getJsonRawBody();
             $user = Users::findFirst($id);
-            if ($user->delete() == false) {
-                $this->app->response
-                        ->setStatusCode(400, "Bad Request")
-                        ->setJsonContent(array('status' => 'ERROR', 'data' => 'User not deleted'));
+            if (!empty($jarray->old_password) && ($jarray->old_password == $user->getPassword())) { 
+                if ($user->delete() == false) {
+                    $this->app->response
+                            ->setStatusCode(400, "Bad Request")
+                            ->setJsonContent(array('status' => 'ERROR', 'data' => 'User not deleted'));
+                } else {
+                    $this->app->response
+                            ->setStatusCode(204, "OK")
+                            ->setJsonContent(array('status' => 'OK', 'data' => 'User deleted'));
+                }
             } else {
-                $this->app->response
-                        ->setStatusCode(204, "OK")
-                        ->setJsonContent(array('status' => 'OK', 'data' => 'User deleted'));
+                    $this->app->response
+                            ->setStatusCode(401, "Unauthorized")
+                            ->setJsonContent(array('status' => 'ERROR', 'data' => 'Validation (2nd level) fail'));                
             }
         } else {
             $this->app->response

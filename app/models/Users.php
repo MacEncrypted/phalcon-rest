@@ -20,6 +20,10 @@ class Users extends Model {
      */
     protected $password;
     
+    public function getPassword() {
+        return $this->password;
+    }
+    
     /**
      * @var string
      */

@@ -50,8 +50,7 @@ class Messages extends Model {
         $return_messages = array();
         foreach ($this->find(
                 [
-                    "id_sender" => $id_sender,
-                    "id_receiver" => $id_receiver,
+                    "id_sender = '$id_sender' AND id_receiver = '$id_receiver'",
                     "limit" => ["number" => $limit, "offset" => $offset],
                     "order" => "id DESC"
                 ]
@@ -79,13 +78,14 @@ class Messages extends Model {
         $return_messages = array();
         foreach ($this->find(
                 [
-                    "id_receiver" => $id_receiver,
+                    "id_receiver = '$id_receiver'",
                     "limit" => ["number" => $limit, "offset" => $offset],
                     "order" => "id DESC"
                 ]
         ) as $message) {
             $return_message = array();
             $return_message['id'] = $message->id;
+            $return_message['id_sender'] = $message->id_sender;
             $return_message['time'] = $message->time;
             $return_message['title'] = $message->content;
             $return_message['type'] = $message->type;
