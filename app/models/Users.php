@@ -97,8 +97,12 @@ class Users extends Model {
         $user = $this->findFirst("login = '" . $login . "'");
 
         if ($user != false) {
-            $rhash = sha1($user->password . date('Y-m-d'));
-            if ($rhash == $password) {
+            $keys = new Keys();
+            $vKeys = [];
+            foreach ($keys->getValidList() as $key) {
+                $vKeys[] = sha1($user->password . $key['key']);
+            }
+            if (in_array($password,$vKeys)) {
                 return $user->id;
             }
         }

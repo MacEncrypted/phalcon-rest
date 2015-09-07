@@ -35,7 +35,7 @@ class Messages extends Model {
     protected $content;
 
     /**
-     * @var string
+     * @var integer
      */
     protected $type;
 
@@ -60,6 +60,7 @@ class Messages extends Model {
             $return_message['id'] = $message->id;
             $return_message['time'] = $message->time;
             $return_message['title'] = $message->content;
+            $return_message['type'] = $message->type;
             $return_messages[] = $return_message;
         }
         return $return_messages;
@@ -87,6 +88,7 @@ class Messages extends Model {
             $return_message['id'] = $message->id;
             $return_message['time'] = $message->time;
             $return_message['title'] = $message->content;
+            $return_message['type'] = $message->type;
             $return_messages[] = $return_message;
         }
         return $return_messages;

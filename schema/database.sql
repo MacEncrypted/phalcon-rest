@@ -26,6 +26,7 @@ CREATE TABLE `messages` (
   `id_sender` int(11) NOT NULL,
   `id_receiver` int(11) NOT NULL,
   `content` text NOT NULL,
+  `type` boolean NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

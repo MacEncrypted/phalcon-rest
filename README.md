@@ -26,10 +26,44 @@ You Must
 ### Basic Auth
 For some requests you need Basic Auth. Basic Auth test data are: ```login: admin``` and password ```sha1(sha1(password) . round_key)```. Current sha1 hashes  and round_keys can be found at main router: ```http://rest.encrypted.pl```
 
-###
-Cron should execute REST index every 60 sec.
+### Cron
+Cron should execute REST index every 60 sec. Simple example: ```*	*	*	*	*	lynx -dump http://rest.encrypted.pl >/dev/null 2>&1```
 
 # Documentation
+
+## Core Module
+This module covers listing of keys and server status
+
+### List keys and status
+- authentication: NO
+- request: ```GET http://rest.encrypted.pl```
+- response JSON:
+```
+{
+  "app": "REST Api @Phalcon 2.0.7",
+  "sha1(password)": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
+  "keys": [
+    {
+      "key": "d6217d4c46c4131fd8924435cbf6b4490aa66e37",
+      "lifetime": 200
+    },
+    {
+      "key": "51c0011feb08373844ec26093ab04401253e764e",
+      "lifetime": 86
+    }
+  ],
+  "passwords": [
+    {
+      "sha1(sha1(password) + key)": "f6bcb6f9b5128631826d9899efa1afdf563d3e58",
+      "lifetime": 200
+    },
+    {
+      "sha1(sha1(password) + key)": "113f936ba0622a3e7735acbbbf04f8db9e91b82e",
+      "lifetime": 86
+    }
+  ]
+}
+```
 
 ## Users Module
 This module covers REST methods for creating, updating, editing and listing Users.
@@ -120,7 +154,8 @@ This module covers REST methods for creating, updating, editing and listing User
 ```
 {
     "id_receiver": "1",
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis maximus mollis faucibus. Etiam eget semper urna, eu finibus urna. Nulla nec erat id sapien scelerisque malesuada."
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis maximus mollis faucibus. Etiam eget semper urna, eu finibus urna. Nulla nec erat id sapien scelerisque malesuada.",
+    "type": "0"
 }
 ```
 - response JSON:
@@ -141,12 +176,14 @@ This module covers REST methods for creating, updating, editing and listing User
     {
         "id": "1",
         "time": "1440532798",
-        "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis maximus mollis faucibus. Etiam eget semper urna, eu finibus urna. Nulla nec erat id sapien scelerisque malesuada."
+        "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis maximus mollis faucibus. Etiam eget semper urna, eu finibus urna. Nulla nec erat id sapien scelerisque malesuada.",
+        "type": "0"
     },
     {
         "id": "2",
         "time": "1440533028",
-        "title": "Pellentesque sit amet ligula vitae justo dictum pretium. Sed sed gravida enim. Maecenas ut dignissim mi. In vitae felis a urna accumsan accumsan."
+        "title": "message_encoded_with_users_public_key",
+        "type": "1"
     }
 ]
 ```
@@ -161,7 +198,8 @@ This module covers REST methods for creating, updating, editing and listing User
   {
     "id": "2",
     "time": "1440533028",
-    "title": "Pellentesque sit amet ligula vitae justo dictum pretium. Sed sed gravida enim. Maecenas ut dignissim mi. In vitae felis a urna accumsan accumsan."
+    "title": "Pellentesque sit amet ligula vitae justo dictum pretium. Sed sed gravida enim. Maecenas ut dignissim mi. In vitae felis a urna accumsan accumsan.",
+    "type": "0"
   }
 ]
 ```

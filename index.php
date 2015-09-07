@@ -83,7 +83,7 @@ if ($app['controllers']['messages']) {
     // Set routers
     $messages->post('/', 'create');
     $messages->get('/{id_sender}/{id_receiver}', 'stream');
-    $messages->get('/inbox', 'inbox');
+    $messages->get('/', 'inbox');
 
     $app->mount($messages);
 }
