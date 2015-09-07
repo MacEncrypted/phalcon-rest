@@ -31,9 +31,9 @@ class UsersController extends Phalcon\DI\Injectable {
     {
         $jarray = $this->app->request->getJsonRawBody();
 
-        if (($jarray != NULL) && ($jarray->login && $jarray->password)) {
+        if (($jarray != NULL) && ($jarray->login && $jarray->password && $jarray->pubkey)) {
             $user = new Users();
-            $userId = $user->setUser($jarray->login, $jarray->password);
+            $userId = $user->setUser($jarray->login, $jarray->password, $jarray->pubkey);
             if ($userId) {
                 $this->app->response
                         ->setStatusCode(201, "Created")
@@ -81,16 +81,16 @@ class UsersController extends Phalcon\DI\Injectable {
         if (!empty($this->app['auth']['id']) && ($this->app['auth']['id'] == $id)) {
             $jarray = $this->app->request->getJsonRawBody();
 
-            if (($jarray != NULL) && ($jarray->login && $jarray->password)) {
+            if (($jarray != NULL) && ($jarray->login && $jarray->password && $jarray->pubkey && $jarray->old_password)) {
                 $user = Users::findFirst($id);
-                $userId = $user->updateUser($jarray->login, $jarray->password);
+                $userId = $user->updateUser($jarray->login, $jarray->password, $jarray->pubkey, $jarray->old_password);
                 if ($userId) {
                     $this->app->response
                             ->setJsonContent(array('status' => 'OK', 'data' => $userId));
                 } else {
                     $this->app->response
                             ->setStatusCode(409, "Conflict")
-                            ->setJsonContent(array('status' => 'ERROR', 'data' => 'duplicated User login'));
+                            ->setJsonContent(array('status' => 'ERROR', 'data' => 'Validation (2nd level) fail or data error'));
                 }
             } else {
                 $this->app->response

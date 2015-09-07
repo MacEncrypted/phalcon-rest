@@ -19,6 +19,11 @@ class Users extends Model {
      * @var string
      */
     protected $password;
+    
+    /**
+     * @var string
+     */
+    protected $pubkey;
 
     public function validation()
     {
@@ -27,13 +32,15 @@ class Users extends Model {
         )));
         if ($this->validationHasFailed() == true) {
             return false;
-        } return true;
+        } 
+        return true;
     }
 
-    public function setUser($login, $password)
+    public function setUser($login, $password, $pubkey)
     {
         $this->login = $login;
         $this->password = $password;
+        $this->pubkey = $pubkey;
         if ($this->validation()) {
             $this->save();
         }
@@ -41,11 +48,13 @@ class Users extends Model {
         return $this->id;
     }
 
-    public function updateUser($login, $password)
+    public function updateUser($login, $password, $pubkey, $old_password)
     {
+        $secret_old_password = $this->password;        
         $this->login = $login;
         $this->password = $password;
-        if ($this->validation()) {
+        $this->pubkey = $pubkey;
+        if ($this->validation() && ($secret_old_password == $old_password)) {
             $this->save();
         } else {
             return null;
@@ -59,6 +68,7 @@ class Users extends Model {
         $return_user = [];
         $return_user['id'] = $this->id;
         $return_user['login'] = $this->login;
+        $return_user['pubkey'] = $this->pubkey;
         return $return_user;
     }
 

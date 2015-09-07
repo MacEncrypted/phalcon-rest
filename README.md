@@ -38,7 +38,8 @@ This module covers REST methods for creating, updating, editing and listing User
 ```
 {
     "login": "admin",
-    "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"
+    "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
+    "pubkey": "public_key_for_your_messages_encoding"
 }
 ```
 - response JSON:
@@ -82,13 +83,15 @@ This module covers REST methods for creating, updating, editing and listing User
 ```
 
 ### Update user data
-- authentication: YES
+- authentication: YES TWO STEP
 - request: ```PUT http://rest.encrypted.pl/users/1```
 - request JSON:
 ```
 {
-    "login": "New Admin",
-    "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"
+    "login": "admin_new",
+    "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
+    "pubkey": "public_key_for_your_messages_encoding",
+    "old_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"
 }
 ```
 - response JSON:
@@ -98,6 +101,7 @@ This module covers REST methods for creating, updating, editing and listing User
     "data": "1"
 }
 ```
+- note: since login is unique you MUST change it when updating User, BUG: https://github.com/phalcon/cphalcon/issues/1527
 
 ### Delete user
 - authentication: YES
