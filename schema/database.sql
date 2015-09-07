@@ -29,3 +29,18 @@ CREATE TABLE `messages` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `keys`
+--
+
+DROP TABLE IF EXISTS `keys`;
+CREATE TABLE `keys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `time` int(11) NOT NULL,
+  `valid` boolean NOT NULL,
+  `key` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+

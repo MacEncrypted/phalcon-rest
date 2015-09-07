@@ -24,7 +24,10 @@ You Must
 # Information
 
 ### Basic Auth
-For some requests you need Basic Auth. Basic Auth test data are: ```login: admin``` and password ```sha1(sha1(password) . date('Y-m-d'))```. Current sha1 hashes can be found at main router: ```http://rest.encrypted.pl```
+For some requests you need Basic Auth. Basic Auth test data are: ```login: admin``` and password ```sha1(sha1(password) . round_key)```. Current sha1 hashes  and round_keys can be found at main router: ```http://rest.encrypted.pl```
+
+###
+Cron should execute REST index every 60 sec.
 
 # Documentation
 
