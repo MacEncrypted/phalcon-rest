@@ -86,6 +86,7 @@ This module covers REST methods for creating, updating, editing and listing User
     "data": "1"
 }
 ```
+- TODO return User object not data with ID
 
 ### List all users
 - authentication: NO
@@ -175,6 +176,7 @@ This module covers REST methods for creating, updating, editing and listing User
 ### List messages from one user to another
 - authentication: YES
 - request: ```GET http://rest.encrypted.pl/messages/3/1```
+- TODO ```?from=1&to=2```
 - optional request data: ```?offset=100&limit=500```
 - response JSON:
 ```
