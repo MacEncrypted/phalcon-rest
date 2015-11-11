@@ -1,7 +1,10 @@
 # Phalcon REST Api 
 
 ### phalcon-rest
-This is basic REST Api written with Phalcon PHP. Current REST Api is released under  [http://rest.encrypted.pl/](http://rest.encrypted.pl/)
+This REST Api Message Server written with Phalcon PHP. Current REST Api is released under  [http://rest.encrypted.pl/](http://rest.encrypted.pl/)
+
+### Author
+Author is Maciej Lewandowski, this app is part of thesis.
 
 ### License 
 MIT is a short, permissive software license. Basically, you can do whatever you want as long as you include the original copyright to *Encrypted.pl* and license notice in any copy of the software/source.
